@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <script src="index.js" defer></script>
 </head>
 <body>
     <div class="content">
@@ -19,7 +20,15 @@
             <div class="dashboard-card-container flex">
                 <div class="dashboard-card">
                     <h1>Snabblänkar</h1>
-                    <button>Lägg till länk</button>
+                    <div class="dashboard-links flex">
+                        <div class="dashboard-card-link">
+                            3
+                        </div>
+                        <div class="dashboard-card-link">
+                            3
+                        </div>
+                        <button class="dashboard-button-link">Lägg till länk</button>
+                    </div>
                 </div>
                 <div class="dashboard-card">
                     <h1>Dagens väder</h1>
@@ -29,7 +38,9 @@
                 </div>
                 <div class="dashboard-card">
                     <h1>Anteckningar</h1>
-                    <textarea></textarea>
+                    <div class="dashboard-note">
+                        <div contenteditable="true" class="dashboard-note-area">a</div>
+                    </div>
                 </div>
             </div>
         </main>

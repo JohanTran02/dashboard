@@ -1,5 +1,9 @@
 :root{
-    --content-gap:20px
+    --content-gap:20px;
+    --content-gapS:10px;
+    --content-gapXs:5px;
+    --rounded-border:15px;
+    --rounded-borderS:10px;
 }
 
 *{
@@ -21,39 +25,72 @@
 .flex{
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .time{
     grid-area: time;
+    align-items: flex-start;
 }
 
 .time-stats{
-    align-items: center;
     gap: var(--content-gap);
     margin-top: var(--content-gap);
-    padding: 5px 50px;
-    border-radius: 15px;
-    width: fit-content;
-    height: fit-content;
+    padding: var(--content-gapXs) 50px;
+    border-radius: var(--rounded-border);
     background-color: green;
 }
 
 .dashboard{
     grid-area: dashboard;
     flex-direction: column;
-    align-items: center;
 }
 
-.dashboard-title{
-    width: fit-content;
+.dashboard-card-container{
+    gap: var(--content-gap);
+    height: 200px;
+    align-items: stretch;
 }
 
 .dashboard-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
     background-color: rgba(128, 128, 128, 0.377);
+}
+
+.dashboard-links{
+    flex-direction: column;
+    flex:1;
+    gap: var(--content-gapXs);
+}
+
+.dashboard-card-link{
+    padding: var(--content-gapS) 80px;
+    border-radius: var(--rounded-borderS);
+    background-color: white;
+}
+
+.dashboard-button-link{
+    margin: var(--content-gapS) 0;
+}
+
+.dashboard-note{
+    padding:0 var(--content-gapXs) var(--content-gapS);
+    flex: 1;
+    width: 100%;
+}
+
+.dashboard-note-area{
+    height: 100%;
+    overflow: hidden;
+    word-wrap: break-word;
+    background-color: aqua;
 }
 
 .random-background{
     grid-area: random-background;
     align-items: flex-end;
-    padding-bottom: 10px;
+    padding-bottom: var(--content-gapS);
 }
