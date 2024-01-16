@@ -1,4 +1,4 @@
-import "/storage.js";
+// import "/storage.js";
 "use strict";
 
 const seconds = 60;
@@ -44,7 +44,7 @@ function getTime(type = "") {
             };
 
             date_value = d.toLocaleTimeString("sv-SE", options);
-        break;
+            break;
         case "date":
             options = {
                 day: "numeric",
@@ -53,7 +53,64 @@ function getTime(type = "") {
             };
 
             date_value = d.toLocaleDateString("sv-SE", options);
-        break;
+            break;
     }
     return date_value;
 }
+
+function createFavicon(url) {
+    const faviconURL = `https://www.google.com/s2/favicons?sz=32&domain_url=${url}`
+    const image = new Image();
+    image.src = faviconURL;
+    image.alt = url;
+    return image;
+}
+
+function createCardElement() {
+    const card = document.createElement("div");
+    card.classList.add("dashboard-link", "flex");
+    card.innerHTML =
+        `
+    <input class="dashboard-link-title"></input>
+    <i class="fa-regular fa-circle-xmark"></i>
+    `;
+
+    addURL(card);
+
+    const card_link_container = document.querySelector(".dashboard-links");
+    card_link_container.append(card);
+}
+
+function addURL(card) {
+    const input = card.querySelector(".dashboard-link-title");
+
+    input.addEventListener("focusout", () => {
+        const url = input.value;
+        input.value = url.split(".")[0].charAt(0).toUpperCase() + url.split(".")[0].slice(1);
+        input.readOnly = true;
+        const favicon = createFavicon(url);
+        card.prepend(favicon);
+        input.blur();
+    });
+
+    input.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            input.blur();
+            event.preventDefault();
+        }
+    })
+
+    const delete_card = card.querySelector(".fa-circle-xmark");
+
+    delete_card.addEventListener("click", function () {
+        this.parentNode.remove();
+    });
+}
+
+//skapa ett kort med ingen xmark eller favicon
+//man ska skriva in i en input
+//när man klickar ut eller enter skapas det en bild och en titel som innehåller länken
+
+
+const button_link = document.querySelector(".dashboard-button-link");
+button_link.addEventListener("click", createCardElement);
