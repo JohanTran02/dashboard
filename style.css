@@ -28,7 +28,7 @@
     align-items: center;
 }
 
-.time{
+.dashboard-time{
     grid-area: time;
     align-items: flex-start;
 }
