@@ -1,0 +1,55 @@
+:root{
+    --content-gap:20px
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.content{
+    display: grid;
+    min-width: 100vw;
+    min-height: 100vh;
+    grid-template-areas: 
+    "time"
+    "dashboard"
+    "random-background";
+}
+
+.flex{
+    display: flex;
+}
+
+.time{
+    justify-content: center;
+    grid-area: time;
+}
+
+.time-stats{
+    align-items: center;
+    gap: var(--content-gap);
+    margin-top: var(--content-gap);
+    padding: 5px 50px;
+    border-radius: 15px;
+    width: fit-content;
+    height: fit-content;
+    background-color: green;
+}
+
+.dashboard{
+    grid-area: dashboard;
+    flex-direction: column;
+}
+
+.dashboard-card{
+    background-color: rgba(128, 128, 128, 0.377);
+}
+
+.random-background{
+    grid-area: random-background;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 10px;
+}
