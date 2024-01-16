@@ -61,15 +61,41 @@
 }
 
 .dashboard-links{
+    overflow-y: scroll;
+    scrollbar-width:none;
+    position: relative;
     flex-direction: column;
-    flex:1;
+    justify-content:flex-start;
+    flex: 1;
+    width: 100%;
     gap: var(--content-gapXs);
+    padding: 0 var(--content-gapS);
 }
 
-.dashboard-card-link{
-    padding: var(--content-gapS) 80px;
+.dashboard-links::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.dashboard-link{
+    justify-content: start;
+    position: relative;
+    width: 100%;
+    padding: var(--content-gapS) 0;
     border-radius: var(--rounded-borderS);
     background-color: white;
+}
+
+.dashboard-link-title{
+    overflow: hidden;
+    white-space: pre-wrap;
+    width: 70%;
+}
+
+.fa-circle-xmark{
+    position: absolute;
+    top: 2px;
+    right: 2px;
 }
 
 .dashboard-button-link{
@@ -87,8 +113,8 @@
 }
 
 .dashboard-note-area{
-    height: 100%;
     overflow: hidden;
+    height: 100%;
     word-wrap: break-word;
     background-color: aqua;
 }
