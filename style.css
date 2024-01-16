@@ -20,10 +20,10 @@
 
 .flex{
     display: flex;
+    justify-content: center;
 }
 
 .time{
-    justify-content: center;
     grid-area: time;
 }
 
@@ -41,6 +41,11 @@
 .dashboard{
     grid-area: dashboard;
     flex-direction: column;
+    align-items: center;
+}
+
+.dashboard-title{
+    width: fit-content;
 }
 
 .dashboard-card{
@@ -49,7 +54,6 @@
 
 .random-background{
     grid-area: random-background;
-    justify-content: center;
     align-items: flex-end;
     padding-bottom: 10px;
 }
