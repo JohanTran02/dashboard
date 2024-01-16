@@ -1,3 +1,4 @@
+import "/storage.js";
 "use strict";
 
 const seconds = 60;
@@ -9,49 +10,50 @@ setInterval(updateHour, seconds * 1000);
 setInterval(updateDate, 60000);
 
 //Ändra tiden(timmar) med minutprecision
-function updateHour(){
+function updateHour() {
     updateTimeElement("time");
 }
 
 //Ändra dagen
-function updateDate(){
+function updateDate() {
     updateTimeElement("date");
 }
 
-function updateTimeElement(element = ""){
+function updateTimeElement(element = "") {
     const timeValue = getTime(element);
-    
+
     const timeElement = document.querySelector(`.${element}`);
     timeElement.innerHTML = timeValue;
 }
 
 //Hämta tiden 
-function getTime(type = ""){
+function getTime(type = "") {
     const d = new Date();
-    let options = {};
-    
-    if(!type){
+    let options = {}, date_value;
+
+    if (!type) {
         console.log("invalid input");
         return;
     }
 
-    if(type === "time"){
-        options = {
-            hour: "numeric",
-            minute: "numeric"
-        };
+    switch (type) {
+        case "time":
+            options = {
+                hour: "numeric",
+                minute: "numeric"
+            };
 
-        const date_time = d.toLocaleTimeString("sv-SE", options);
-        return date_time;
-    }
-    else if(type === "date"){
-        options = {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        };
+            date_value = d.toLocaleTimeString("sv-SE", options);
+        break;
+        case "date":
+            options = {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            };
 
-        const date_date = d.toLocaleDateString("sv-SE", options);
-        return date_date;
+            date_value = d.toLocaleDateString("sv-SE", options);
+        break;
     }
+    return date_value;
 }

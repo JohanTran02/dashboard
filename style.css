@@ -76,10 +76,14 @@
     margin: var(--content-gapS) 0;
 }
 
+.dashboard-card > .dashboard-note{
+    padding: 0 var(--content-gapS) var(--content-gapXs);
+}
+
 .dashboard-note{
-    padding:0 var(--content-gapXs) var(--content-gapS);
     flex: 1;
     width: 100%;
+    overflow: hidden;
 }
 
 .dashboard-note-area{
@@ -87,6 +91,10 @@
     overflow: hidden;
     word-wrap: break-word;
     background-color: aqua;
+}
+
+.dashboard-title{
+    white-space: pre-wrap;
 }
 
 .random-background{
