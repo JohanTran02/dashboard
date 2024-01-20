@@ -1,6 +1,8 @@
 // import "/storage.js";
 "use strict";
+// import axios from "axios";
 
+const my_api_key = "REPLACE";
 const seconds = 60;
 
 updateHour();
@@ -107,10 +109,18 @@ function addURL(card) {
     });
 }
 
-//skapa ett kort med ingen xmark eller favicon
-//man ska skriva in i en input
-//när man klickar ut eller enter skapas det en bild och en titel som innehåller länken
+async function getWeather() {
+    const weather_stats = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${my_api_key}`);
+    const response = await weather_stats.json();
 
+    return response;
+}
+
+const button = document.querySelector(".dashboard-button-weather");
+const weather = await getWeather();
+button.addEventListener("click", () => {
+    console.log(weather);
+});
 
 const button_link = document.querySelector(".dashboard-button-link");
 button_link.addEventListener("click", createCardElement);

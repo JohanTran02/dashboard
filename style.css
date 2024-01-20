@@ -1,130 +1,130 @@
-:root{
-    --content-gap:20px;
-    --content-gapS:10px;
-    --content-gapXs:5px;
-    --rounded-border:15px;
-    --rounded-borderS:10px;
+:root {
+  --content-gap: 20px;
+  --content-gapS: 10px;
+  --content-gapXs: 5px;
+  --rounded-border: 15px;
+  --rounded-borderS: 10px;
 }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.content{
-    display: grid;
-    min-width: 100vw;
-    min-height: 100vh;
-    grid-template-areas: 
+.content {
+  display: grid;
+  min-width: 100vw;
+  min-height: 100vh;
+  grid-template-areas:
     "time"
     "dashboard"
     "random-background";
 }
 
-.flex{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.dashboard-time{
-    grid-area: time;
-    align-items: flex-start;
+.dashboard-time {
+  grid-area: time;
+  align-items: flex-start;
 }
 
-.time-stats{
-    gap: var(--content-gap);
-    margin-top: var(--content-gap);
-    padding: var(--content-gapXs) 50px;
-    border-radius: var(--rounded-border);
-    background-color: green;
+.time-stats {
+  gap: var(--content-gap);
+  margin-top: var(--content-gap);
+  padding: var(--content-gapXs) 50px;
+  border-radius: var(--rounded-border);
+  background-color: green;
 }
 
-.dashboard{
-    grid-area: dashboard;
-    flex-direction: column;
+.dashboard {
+  grid-area: dashboard;
+  flex-direction: column;
 }
 
-.dashboard-card-container{
-    gap: var(--content-gap);
-    height: 200px;
-    align-items: stretch;
+.dashboard-card-container {
+  gap: var(--content-gap);
+  height: 200px;
+  align-items: stretch;
 }
 
-.dashboard-card{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 200px;
-    background-color: rgba(128, 128, 128, 0.377);
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  background-color: rgba(128, 128, 128, 0.377);
 }
 
-.dashboard-links{
-    overflow-y: scroll;
-    scrollbar-width:none;
-    position: relative;
-    flex-direction: column;
-    justify-content:flex-start;
-    flex: 1;
-    width: 100%;
-    gap: var(--content-gapXs);
-    padding: 0 var(--content-gapS);
+.dashboard-links {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
+  width: 100%;
+  gap: var(--content-gapXs);
+  padding: 0 var(--content-gapS);
 }
 
 .dashboard-links::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+  width: 0;
+  height: 0;
 }
 
-.dashboard-link{
-    justify-content: start;
-    position: relative;
-    width: 100%;
-    padding: var(--content-gapS) 0;
-    border-radius: var(--rounded-borderS);
-    background-color: white;
+.dashboard-link {
+  justify-content: start;
+  position: relative;
+  width: 100%;
+  padding: var(--content-gapS) 0;
+  border-radius: var(--rounded-borderS);
+  background-color: white;
 }
 
-.dashboard-link-title{
-    overflow: hidden;
-    white-space: pre-wrap;
-    width: 70%;
+.dashboard-link-title {
+  overflow: hidden;
+  white-space: pre-wrap;
+  width: 70%;
 }
 
-.fa-circle-xmark{
-    position: absolute;
-    top: 2px;
-    right: 2px;
+.fa-circle-xmark {
+  position: absolute;
+  top: 2px;
+  right: 2px;
 }
 
-.dashboard-button-link{
-    margin: var(--content-gapS) 0;
+.dashboard-button-link {
+  margin: var(--content-gapS) 0;
 }
 
-.dashboard-card > .dashboard-note{
-    padding: 0 var(--content-gapS) var(--content-gapXs);
+.dashboard-card > .dashboard-note {
+  padding: 0 var(--content-gapS) var(--content-gapXs);
 }
 
-.dashboard-note{
-    flex: 1;
-    width: 100%;
-    overflow: hidden;
+.dashboard-note {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
 }
 
-.dashboard-note-area{
-    overflow: hidden;
-    height: 100%;
-    word-wrap: break-word;
-    background-color: aqua;
+.dashboard-note-area {
+  overflow: hidden;
+  height: 100%;
+  word-wrap: break-word;
+  background-color: aqua;
 }
 
-.dashboard-title{
-    white-space: pre-wrap;
+.dashboard-title {
+  white-space: pre-wrap;
 }
 
-.random-background{
-    grid-area: random-background;
-    align-items: flex-end;
-    padding-bottom: var(--content-gapS);
+.random-background {
+  grid-area: random-background;
+  align-items: flex-end;
+  padding-bottom: var(--content-gapS);
 }
