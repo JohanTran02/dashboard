@@ -60,7 +60,7 @@
   background-color: rgba(128, 128, 128, 0.377);
 }
 
-.dashboard-links {
+.dashboard-site-links {
   overflow-y: scroll;
   scrollbar-width: none;
   position: relative;
@@ -72,12 +72,12 @@
   padding: 0 var(--content-gapS);
 }
 
-.dashboard-links::-webkit-scrollbar {
+.dashboard-site-links::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-.dashboard-link {
+.dashboard-site {
   justify-content: start;
   position: relative;
   width: 100%;
@@ -104,6 +104,47 @@
 
 .dashboard-card > .dashboard-note {
   padding: 0 var(--content-gapS) var(--content-gapXs);
+}
+
+.dashboard-weather-links {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
+  width: 100%;
+  gap: var(--content-gapXs);
+  padding: 0 var(--content-gapS);
+}
+
+.dashboard-weather {
+  width: 100%;
+  gap: var(--content-gapXs);
+  border-radius: var(--rounded-borderS);
+  background-color: white;
+}
+
+.weather-stats {
+  flex: 1;
+  gap: var(--content-gapXs);
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.weather-temp-stats {
+  gap: var(--content-gapS);
+}
+
+.weather-temp-stats > h3 {
+  padding: 0 var(--content-gapS);
+  border-radius: var(--rounded-borderS);
+  background-color: rgb(211, 211, 211);
+}
+
+.weather-icon {
+  height: 64px;
+  width: 64px;
+  object-fit: cover;
 }
 
 .dashboard-note {
