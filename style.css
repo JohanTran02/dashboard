@@ -102,10 +102,6 @@
   margin: var(--content-gapS) 0;
 }
 
-.dashboard-card > .dashboard-note {
-  padding: 0 var(--content-gapS) var(--content-gapXs);
-}
-
 .dashboard-weather-links {
   overflow-y: scroll;
   scrollbar-width: none;
@@ -154,7 +150,8 @@
 }
 
 .dashboard-note-area {
-  overflow: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
   height: 100%;
   word-wrap: break-word;
   background-color: aqua;
