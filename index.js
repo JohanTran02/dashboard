@@ -1,6 +1,6 @@
 // import "/storage.js";
 "use strict";
-// import axios from "axios";
+import axios, { AxiosError } from "axios";
 //import.meta.env.VITE_TEST
 
 const my_api_key = "REPLACE";
@@ -135,7 +135,7 @@ function createCardElement(type = "", url = "", weather = undefined) {
         const weather_type = card.querySelector(".weather-type");
 
         weather_day.textContent = day;
-        weather_temp.textContent = Math.round(weather.main.temp);
+        weather_temp.textContent = `${Math.round(weather.main.temp)}\u2103`;
         weather_type.textContent = weather.weather[0].main;
 
         card.prepend(weather_image);
@@ -170,38 +170,102 @@ function addURL(card) {
     });
 }
 
-const getWeather =
-    async () => {
-        try {
-            const location_stats = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=London&limit=1&appid=${my_api_key}`);
-            const location = await location_stats.json();
-
+const getWeatherApi =
+    async (weather_location = "") => {
+        if (weather_location) {
             try {
-                const weather_stats = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${location[0].lat}&lon=${location[0].lon}&units=metric&appid=${my_api_key}`);
-                const weather = await weather_stats.json();
+                const location = await axios(`https://api.openweathermap.org/geo/1.0/direct?q=${weather_location}&limit=1&appid=${my_api_key}`);
+                location.status = 401;
 
-                return weather;
+                console.log(location);
+                try {
+                    const weather = await axios(`https://api.openweathermap.org/data/2.5/forecast?lat=${location.data[0].lat}&lon=${location.data[0].lon}&units=metric&appid=${my_api_key}`);
+                    console.log(weather);
+                    return weather.data;
+                }
+                catch (e) {
+                    if(e.response){
+                        console.log(e.response.data);
+                        console.log(e.response.status);
+                        console.log(e.response.headers);
+                    }
+                    else if (e.request){
+                    console.log(e.request);
+                    }
+                    else{
+                        console.log(e.message);
+                    }
+                }
+            return location.data;
             }
             catch (e) {
-                console.error(e);
+                if(e.response){
+                    console.log(e.response.data);
+                    console.log(e.response.status);
+                    console.log(e.response.headers);
+                }
+                else if (e.request){
+                console.log(e.request);
+                }
+                else{
+                    console.log(e.message);
+                }
             }
         }
-        catch (e) {
-            console.error(e);
+        else {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPos);
+            }
         }
     }
 
-const button = document.querySelector(".dashboard-button-weather");
-button.addEventListener("click", () => {
-    //Kolla om det man söker på är samma stad
-    //Om det är det ska den inte göra en ny fetch
-    const weather = getWeather();
-    weather.then(weather => {
-        createWeatherStats(weather, 3)
-    });
+async function showPos(pos) {
+    try {
+        const weather = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&units=metric&appid=${my_api_key}`);
+        await createWeatherStats(weather.data, 3);
+    }
+    catch (e) {
+        if(e.response){
+            console.log(e.response.data);
+            console.log(e.response.status);
+            console.log(e.response.headers);
+        }
+        else if (e.request){
+        console.log(e.request);
+        }
+        else{
+            console.log(e.message);
+        }
+    }
+}
+
+getWeatherApi();
+
+const input = document.querySelector(".dashboard-button-weather");
+
+input.addEventListener("focusout", async () => {
+    const location = input.value;
+    const weather = await getWeatherApi(location);
+    await createWeatherStats(weather, 3);
+    input.blur();
 });
 
-function createWeatherStats(weather, amount) {
+input.addEventListener("keypress", async (event) => {
+    if (event.key === "Enter") {
+        const location = input.value;
+        const weather = await getWeatherApi(location);
+        await createWeatherStats(weather, 3);
+        input.blur();
+        event.preventDefault();
+    }
+})
+
+
+async function createWeatherStats(weather, amount) {
+    if (!weather) {
+        return;
+    }
+
     const weather_list = document.querySelector(".dashboard-weather-links");
 
     if (weather_list.hasChildNodes()) {
@@ -209,24 +273,22 @@ function createWeatherStats(weather, amount) {
     }
 
     amount = amount >= 5 ? 5 : amount;
-    const weather_times = nearestTime(weather);
+    const weather_times = await nearestTime(weather);
 
     for (let i = 0; i < amount; i++) {
         createCardElement("weather", weather_times[i].weather[0].icon, weather_times[i]);
     }
 }
 
-function nearestTime(weather) {
+async function nearestTime(weather) {
     //Ta timmen just nu och kolla vad som är närmast tiden i listan 
     //Ta sedan weather statsen från just dem 
-    const indexArr = weather.list.map(weather_item => {
+    const indexArr = await weather.list.map(weather_item => {
         return Math.abs(new Date() - new Date(weather_item.dt_txt));
     });
 
     const nearestTime = indexArr.indexOf(Math.min(...indexArr));
     const weather_nearest_time = weather.list.filter(weather_item => weather_item.dt_txt.includes(new Intl.DateTimeFormat("sv-SE", { hour: "numeric", minute: "numeric", second: "numeric" }).format(new Date(weather.list[nearestTime].dt_txt))));
 
-    console.log(weather_nearest_time);
     return weather_nearest_time;
 }
-
