@@ -166,3 +166,7 @@
   align-items: flex-end;
   padding-bottom: var(--content-gapS);
 }
+
+.position{
+  cursor: pointer;
+}

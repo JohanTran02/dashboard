@@ -1,6 +1,6 @@
 // import "/storage.js";
 "use strict";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 //import.meta.env.VITE_TEST
 
 const my_api_key = "REPLACE";
@@ -171,101 +171,86 @@ function addURL(card) {
 }
 
 const getWeatherApi =
-    async (weather_location = "") => {
-        if (weather_location) {
-            try {
-                const location = await axios(`https://api.openweathermap.org/geo/1.0/direct?q=${weather_location}&limit=1&appid=${my_api_key}`);
-                location.status = 401;
-
-                console.log(location);
-                try {
-                    const weather = await axios(`https://api.openweathermap.org/data/2.5/forecast?lat=${location.data[0].lat}&lon=${location.data[0].lon}&units=metric&appid=${my_api_key}`);
-                    console.log(weather);
-                    return weather.data;
-                }
-                catch (e) {
-                    if(e.response){
-                        console.log(e.response.data);
-                        console.log(e.response.status);
-                        console.log(e.response.headers);
-                    }
-                    else if (e.request){
-                    console.log(e.request);
-                    }
-                    else{
-                        console.log(e.message);
-                    }
-                }
-            return location.data;
-            }
-            catch (e) {
-                if(e.response){
-                    console.log(e.response.data);
-                    console.log(e.response.status);
-                    console.log(e.response.headers);
-                }
-                else if (e.request){
-                console.log(e.request);
-                }
-                else{
-                    console.log(e.message);
-                }
-            }
+    async (weather_location) => {
+        try{
+            const weather = await axios(`https://api.openweathermap.org/data/2.5/forecast?q=${weather_location}&units=metric&appid=${my_api_key}`);
+            return weather.data;
         }
-        else {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPos);
-            }
+        catch(e){
+            console.error(e.response.data.message);
+            const weather_card = document.querySelector(".dashboard-weather-links");
+            weather_card.textContent = e.response.data.message;
+            return;
         }
     }
 
-async function showPos(pos) {
-    try {
-        const weather = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&units=metric&appid=${my_api_key}`);
-        await createWeatherStats(weather.data, 3);
-    }
-    catch (e) {
-        if(e.response){
-            console.log(e.response.data);
-            console.log(e.response.status);
-            console.log(e.response.headers);
-        }
-        else if (e.request){
-        console.log(e.request);
-        }
-        else{
-            console.log(e.message);
-        }
+function getLocation(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(showPos,showErr);
     }
 }
 
-getWeatherApi();
-
-const input = document.querySelector(".dashboard-button-weather");
-
-input.addEventListener("focusout", async () => {
-    const location = input.value;
-    const weather = await getWeatherApi(location);
-    await createWeatherStats(weather, 3);
-    input.blur();
-});
-
-input.addEventListener("keypress", async (event) => {
-    if (event.key === "Enter") {
-        const location = input.value;
-        const weather = await getWeatherApi(location);
-        await createWeatherStats(weather, 3);
-        input.blur();
-        event.preventDefault();
+async function showPos(pos) {
+    try{
+        const weather = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&units=metric&appid=${my_api_key}`);
+        await createWeatherStats(weather.data, 3);
     }
-})
-
-
-async function createWeatherStats(weather, amount) {
-    if (!weather) {
+    catch(e){
         return;
     }
+}
 
+function showErr(error){
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            console.log("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+            console.log("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+            console.log("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+            console.log("An unknown error occurred.");
+          break;
+      }
+}
+
+const position = document.querySelector(".position");
+
+position.addEventListener("click", () => {
+    getLocation();
+});
+
+getInputValue();
+
+function getInputValue(){
+    const input = document.querySelector(".dashboard-button-weather");
+    let location = "";
+
+    input.addEventListener("focusout", () => {
+        location = input.value;
+    });
+
+    input.addEventListener("focusout", async () => {
+        const weather = await getWeatherApi(location);
+
+        if(weather){
+            await createWeatherStats(weather, 3);
+        }
+    });
+    
+    input.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            location = input.value;
+            input.blur();
+            event.preventDefault();
+        }
+    });
+}
+
+async function createWeatherStats(weather, amount) {
     const weather_list = document.querySelector(".dashboard-weather-links");
 
     if (weather_list.hasChildNodes()) {
