@@ -3,7 +3,8 @@
 import axios from "axios";
 //import.meta.env.VITE_TEST
 
-const my_api_key = "REPLACE";
+const my_api_key = import.meta.env.VITE_WEATHER_TOKEN;
+const unplash_key = import.meta.env.VITE_UNSPLASH_TOKEN;
 const seconds = 60;
 
 updateHour();
@@ -277,3 +278,22 @@ async function nearestTime(weather) {
 
     return weather_nearest_time;
 }
+
+async function getUnsplash(){
+    try{
+        const images = await axios(`https://api.unsplash.com/photos/?client_id=${unplash_key}`);
+        return images.data;
+    }
+    catch(e){
+        return;
+    }
+}
+
+const images = await getUnsplash();
+const background_button = document.querySelector(".random-background-button");
+background_button.addEventListener("click", () => {
+    const random = Math.floor(Math.random() * images.length);
+    console.log(images[random].urls.full);
+    const content = document.querySelector(".content");
+    content.style.background = `url(${images[random].urls.full}) no-repeat center / cover`
+});
