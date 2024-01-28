@@ -173,11 +173,11 @@ function addURL(card) {
 
 const getWeatherApi =
     async (weather_location) => {
-        try{
+        try {
             const weather = await axios(`https://api.openweathermap.org/data/2.5/forecast?q=${weather_location}&units=metric&appid=${my_api_key}`);
             return weather.data;
         }
-        catch(e){
+        catch (e) {
             console.error(e.response.data.message);
             const weather_card = document.querySelector(".dashboard-weather-links");
             weather_card.textContent = e.response.data.message;
@@ -185,37 +185,37 @@ const getWeatherApi =
         }
     }
 
-function getLocation(){
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(showPos,showErr);
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPos, showErr);
     }
 }
 
 async function showPos(pos) {
-    try{
+    try {
         const weather = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&units=metric&appid=${my_api_key}`);
         await createWeatherStats(weather.data, 3);
     }
-    catch(e){
+    catch (e) {
         return;
     }
 }
 
-function showErr(error){
-    switch(error.code) {
+function showErr(error) {
+    switch (error.code) {
         case error.PERMISSION_DENIED:
             console.log("User denied the request for Geolocation.");
-          break;
+            break;
         case error.POSITION_UNAVAILABLE:
             console.log("Location information is unavailable.");
-          break;
+            break;
         case error.TIMEOUT:
             console.log("The request to get user location timed out.");
-          break;
+            break;
         case error.UNKNOWN_ERROR:
             console.log("An unknown error occurred.");
-          break;
-      }
+            break;
+    }
 }
 
 const position = document.querySelector(".position");
@@ -224,9 +224,7 @@ position.addEventListener("click", () => {
     getLocation();
 });
 
-getInputValue();
-
-function getInputValue(){
+function getInputValue() {
     const input = document.querySelector(".dashboard-button-weather");
     let location = "";
 
@@ -237,11 +235,11 @@ function getInputValue(){
     input.addEventListener("focusout", async () => {
         const weather = await getWeatherApi(location);
 
-        if(weather){
+        if (weather) {
             await createWeatherStats(weather, 3);
         }
     });
-    
+
     input.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             location = input.value;
@@ -279,21 +277,72 @@ async function nearestTime(weather) {
     return weather_nearest_time;
 }
 
-async function getUnsplash(){
-    try{
+async function getUnsplash() {
+    try {
         const images = await axios(`https://api.unsplash.com/photos/?client_id=${unplash_key}`);
-        return images.data;
+        return images.data.map(image => {
+            return {
+                alt: image.alt_description,
+                description: image.description,
+                src: image.urls.full,
+                height: image.height,
+                width: image.width
+            }
+        });
     }
-    catch(e){
+    catch (e) {
         return;
     }
 }
 
-const images = await getUnsplash();
+let images,imageURL,oldImage, newImage;
+async function renderImages() {
+    const content = document.querySelector(".content");
+    if (!images) {
+        images = await getUnsplash();
+        imageURL = await Promise.all(images.map(async (image) => {
+            const imageContent = await imageOnLoad(image);
+            content.append(imageContent);
+            return imageContent;
+        }));
+        const random = Math.floor(Math.random() * imageURL.length);
+        imageURL[random].classList.add("fade-in");
+        oldImage = imageURL[random];
+    }
+    else {
+        const random = Math.floor(Math.random() * imageURL.length);
+        newImage = imageURL[random];
+        setTimeout(() => {
+            if(oldImage){
+                oldImage.classList.remove("fade-in");
+            }
+            setTimeout(() => {
+                if (imageURL[random].complete) {
+                    newImage.classList.add("fade-in");
+                    oldImage = newImage;
+                }
+            }, 100);
+        }, 100);
+    }
+}
+
+async function imageOnLoad(imgObj) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = imgObj.src;
+        image.alt = imgObj.alt;
+        image.classList.add("fade-image");
+    });
+}
+
 const background_button = document.querySelector(".random-background-button");
 background_button.addEventListener("click", () => {
-    const random = Math.floor(Math.random() * images.length);
-    console.log(images[random].urls.full);
-    const content = document.querySelector(".content");
-    content.style.background = `url(${images[random].urls.full}) no-repeat center / cover`
+    renderImages();
 });
+    
+document.addEventListener("DOMContentLoaded", () => {
+    renderImages();
+});
+getInputValue();
