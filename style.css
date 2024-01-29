@@ -20,11 +20,14 @@ body{
 .content {
   display: grid;
   height: 100vh;
+  position: relative;
+  isolation: isolate;
   grid-template-areas:
     "time"
     "dashboard"
     "random-background";
   color: black;
+  background-color: black;
 }
 
 h1, .time-stats{
@@ -204,4 +207,13 @@ h1, .time-stats{
 
 .position{
   cursor: pointer;
+}
+
+#map{
+  height: 100%;
+  width: 100%;
+}
+
+.mapboxgl-ctrl-directions{
+  min-width: 200px !important;
 }

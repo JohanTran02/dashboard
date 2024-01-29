@@ -5,6 +5,7 @@ import axios from "axios";
 
 const my_api_key = import.meta.env.VITE_WEATHER_TOKEN;
 const unplash_key = import.meta.env.VITE_UNSPLASH_TOKEN;
+const map_token = import.meta.env.VITE_MAP_TOKEN;
 const seconds = 60;
 
 updateHour();
@@ -295,7 +296,7 @@ async function getUnsplash() {
     }
 }
 
-let images,imageURL,oldImage, newImage;
+let images, imageURL, oldImage, newImage;
 async function renderImages() {
     const content = document.querySelector(".content");
     if (!images) {
@@ -313,7 +314,7 @@ async function renderImages() {
         const random = Math.floor(Math.random() * imageURL.length);
         newImage = imageURL[random];
         setTimeout(() => {
-            if(oldImage){
+            if (oldImage) {
                 oldImage.classList.remove("fade-in");
             }
             setTimeout(() => {
@@ -341,8 +342,27 @@ const background_button = document.querySelector(".random-background-button");
 background_button.addEventListener("click", () => {
     renderImages();
 });
-    
+
 document.addEventListener("DOMContentLoaded", () => {
     renderImages();
 });
+
+mapboxgl.accessToken = map_token;
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    center: [-74.5, 40], // starting position [lng, lat]
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    zoom: 9 // starting zoom
+});
+
+const nav = new mapboxgl.NavigationControl();
+
+map.addControl(nav);
+map.addControl(
+    new MapboxDirections({
+        accessToken: mapboxgl.accessToken
+    }),
+    'top-left'
+);
+
 getInputValue();
