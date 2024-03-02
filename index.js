@@ -292,60 +292,73 @@ async function getUnsplash() {
         });
     }
     catch (e) {
+        console.error(e);
         return;
     }
 }
 
-let images, imageURL, oldImage, newImage;
+let images, imageURL, oldImage, newImage, oldRandom;
 async function renderImages() {
     const content = document.querySelector(".content");
-    if (!images) {
-        images = await getUnsplash();
-        imageURL = await Promise.all(images.map(async (image) => {
-            const imageContent = await imageOnLoad(image);
-            content.append(imageContent);
-            return imageContent;
-        }));
-        const random = Math.floor(Math.random() * imageURL.length);
-        imageURL[random].classList.add("fade-in");
-        oldImage = imageURL[random];
-    }
-    else {
-        const random = Math.floor(Math.random() * imageURL.length);
-        newImage = imageURL[random];
+    images = await getUnsplash();
+
+
+    imageURL = await Promise.all(images.map(async (image) => {
+        const imageContent = await imageOnLoad(image);
+        imageContent.classList.add("fade-image");
+        content.append(imageContent);
+        return imageContent;
+    }));
+
+    const random = Math.floor(Math.random() * images.length);
+    imageURL[random].classList.add("fade-in");
+
+    oldImage = imageURL[random];
+    oldRandom = random;
+}
+
+async function changeImage() {
+    const random = randomNumber(imageURL, oldRandom);
+    oldRandom = random;
+    newImage = imageURL[random];
+    if (newImage.complete) {
         setTimeout(() => {
             if (oldImage) {
                 oldImage.classList.remove("fade-in");
             }
             setTimeout(() => {
-                if (imageURL[random].complete) {
-                    newImage.classList.add("fade-in");
-                    oldImage = newImage;
-                }
+                newImage.classList.add("fade-in");
             }, 100);
+            oldImage = newImage;
         }, 100);
+    }
+}
+
+function randomNumber(images, oldIndex) {
+    const random = Math.floor(Math.random() * images.length);
+    if (random !== oldIndex) {
+        console.log(random);
+        return random;
+    }
+    else {
+        return randomNumber(images, oldIndex);
     }
 }
 
 async function imageOnLoad(imgObj) {
     return new Promise((resolve, reject) => {
         const image = new Image();
-        image.onload = () => resolve(image);
-        image.onerror = reject;
         image.src = imgObj.src;
         image.alt = imgObj.alt;
-        image.classList.add("fade-image");
+        image.onload = () => resolve(image);
+        image.onerror = reject;
     });
 }
 
 const background_button = document.querySelector(".random-background-button");
-background_button.addEventListener("click", () => {
-    renderImages();
-});
+background_button.addEventListener("click", changeImage);
 
-document.addEventListener("DOMContentLoaded", () => {
-    renderImages();
-});
+window.onload = renderImages();
 
 mapboxgl.accessToken = map_token;
 const map = new mapboxgl.Map({
@@ -364,5 +377,6 @@ map.addControl(
     }),
     'top-left'
 );
+map.addControl(new mapboxgl.FullscreenControl(), "bottom-left");
 
 getInputValue();

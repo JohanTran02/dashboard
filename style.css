@@ -12,7 +12,7 @@
   box-sizing: border-box;
 }
 
-body{
+body {
   height: 100vh;
   min-height: fit-content;
 }
@@ -30,7 +30,8 @@ body{
   background-color: black;
 }
 
-h1, .time-stats{
+h1,
+.time-stats {
   color: white;
 }
 
@@ -125,6 +126,7 @@ h1, .time-stats{
   width: 100%;
   gap: var(--content-gapXs);
   padding: 0 var(--content-gapS);
+  color: white;
 }
 
 .dashboard-weather {
@@ -134,7 +136,7 @@ h1, .time-stats{
   background-color: white;
 }
 
-.dashboard-button-weather{
+.dashboard-button-weather {
   border: none;
   height: 20px;
   border-radius: 5px;
@@ -175,6 +177,7 @@ h1, .time-stats{
   scrollbar-width: none;
   height: 100%;
   word-wrap: break-word;
+  color: white;
 }
 
 .dashboard-title {
@@ -187,7 +190,7 @@ h1, .time-stats{
   padding-bottom: var(--content-gapS);
 }
 
-.fade-image{
+.fade-image {
   position: absolute;
   top: 0;
   opacity: 0;
@@ -196,24 +199,25 @@ h1, .time-stats{
   object-fit: cover;
   object-position: center;
   z-index: -1;
-  transition:300ms opacity ease-in-out;
+  transition: 300ms opacity ease-in-out;
   transition-delay: 300ms;
 }
 
-.fade-in{
-  opacity: 1; 
+.fade-in {
+  opacity: 1;
   transition-delay: 0ms;
 }
 
-.position{
+.position {
   cursor: pointer;
+  color: white;
 }
 
-#map{
+#map {
   height: 100%;
   width: 100%;
 }
 
-.mapboxgl-ctrl-directions{
+.mapboxgl-ctrl-directions {
   min-width: 200px !important;
 }

@@ -1,60 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-    <script type="module" src="index.js"></script>
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.2.0/mapbox-gl-directions.css" type="text/css">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.2.0/mapbox-gl-directions.js"></script>
-    <script
-      src="https://kit.fontawesome.com/fdb8641d55.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body>
-    <div class="content">
-      <header class="dashboard-time flex">
-        <div class="time-stats flex">
-          <h2 class="time"></h2>
-          <p class="date"></p>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="index.js"></script>
+  <link rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.2.0/mapbox-gl-directions.css"
+    type="text/css">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+  <script
+    src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.2.0/mapbox-gl-directions.js"></script>
+  <script src="https://kit.fontawesome.com/fdb8641d55.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="content">
+    <header class="dashboard-time flex">
+      <div class="time-stats flex">
+        <h2 class="time"></h2>
+        <p class="date"></p>
+      </div>
+    </header>
+    <main class="dashboard flex">
+      <h1 contenteditable="true" class="dashboard-title">John Doe Dashboard</h1>
+      <div class="dashboard-card-container flex">
+        <div class="dashboard-card">
+          <h1>Snabblänkar</h1>
+          <div class="dashboard-site-links flex"></div>
+          <button class="dashboard-button-link">Lägg till länk</button>
         </div>
-      </header>
-      <main class="dashboard flex">
-        <h1 contenteditable="true" class="dashboard-title">John Doe Dashboard</h1>
-        <div class="dashboard-card-container flex">
-          <div class="dashboard-card">
-            <h1>Snabblänkar</h1>
-            <div class="dashboard-site-links flex"></div>
-            <button class="dashboard-button-link">Lägg till länk</button>
-          </div>
-          <div class="dashboard-card">
-            <h1>Dagens väder</h1>
-            <div class="dashboard-weather-links flex"></div>
-            <p class="position">Visa min position</p>
-            <input
-              type="text"
-              class="dashboard-button-link dashboard-button-weather"
-              placeholder="Lägg till stad"
-            />
-          </div>
-          <div class="dashboard-card">
-            <div id="map"></div>
-          </div>
-          <div class="dashboard-card">
-            <h1>Anteckningar</h1>
-            <div class="dashboard-note">
-              <div contenteditable="true" class="dashboard-note-area"></div>
-            </div>
+        <div class="dashboard-card">
+          <h1>Dagens väder</h1>
+          <div class="dashboard-weather-links flex"></div>
+          <p class="position">Visa min position</p>
+          <input type="text" class="dashboard-button-link dashboard-button-weather" placeholder="Lägg till stad" />
+        </div>
+        <div class="dashboard-card">
+          <div id="map"></div>
+        </div>
+        <div class="dashboard-card">
+          <h1>Anteckningar</h1>
+          <div class="dashboard-note">
+            <div contenteditable="true" class="dashboard-note-area"></div>
           </div>
         </div>
-      </main>
-      <footer class="random-background flex">
-        <button class="random-background-button">Slumpa ny bakgrund</button>
-      </footer>
-    </div>
-  </body>
+      </div>
+    </main>
+    <footer class="random-background flex">
+      <button class="random-background-button">Slumpa ny bakgrund</button>
+    </footer>
+  </div>
+</body>
+
 </html>
