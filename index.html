@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="index.js"></script>
+  <script type="module" src="index.js" defer></script>
+  <script type="module" src="storage.js" defer></script>
   <link rel="stylesheet"
     href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.2.0/mapbox-gl-directions.css"
     type="text/css">
@@ -31,7 +32,8 @@
         <div class="dashboard-card">
           <h1>Snabblänkar</h1>
           <div class="dashboard-site-links flex"></div>
-          <button class="dashboard-button-link">Lägg till länk</button>
+          <input class="dashboard-link-title" type="text">
+          <!-- <button class="dashboard-button-link">Lägg till länk</button> -->
         </div>
         <div class="dashboard-card">
           <h1>Dagens väder</h1>

@@ -1,6 +1,7 @@
 // import "/storage.js";
 "use strict";
 import axios from "axios";
+import { saveLinks } from "./storage";
 //import.meta.env.VITE_TEST
 
 const my_api_key = import.meta.env.VITE_WEATHER_TOKEN;
@@ -98,9 +99,8 @@ function createCardElement(type = "", url = "", weather = undefined) {
         case "site":
             card.innerHTML =
                 `
-            <input class="dashboard-link-title">
             <i class="fa-regular fa-circle-xmark"></i>
-            `;
+                `;
             addURL(card);
             break;
         case "weather":
@@ -144,31 +144,36 @@ function createCardElement(type = "", url = "", weather = undefined) {
     }
 }
 
+const input = document.querySelector(".dashboard-link-title");
+
+input.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        createCardElement("site");
+        input.blur();
+        event.preventDefault();
+        saveLinks();
+    }
+})
+
 //När man skriver en länk lägger den till ett kort med namn på sidan och favicon
 function addURL(card) {
-    const input = card.querySelector(".dashboard-link-title");
-
     //När inputen går ut ur fokus eller när man trycker enter visas bild och namn på länken
     input.addEventListener("focusout", () => {
+        const site_link = document.createElement("a");
         const url = input.value;
-        input.value = url.split(".")[0].charAt(0).toUpperCase() + url.split(".")[0].slice(1);
+        site_link.textContent = url.split(".")[0].charAt(0).toUpperCase() + url.split(".")[0].slice(1);
+        site_link.href = `https://www.${url}/`;
         const favicon = createImage("site", url);
         card.prepend(favicon);
-        input.disabled = true;
+        card.append(site_link);
         input.blur();
     });
-
-    input.addEventListener("keypress", (event) => {
-        if (event.key === "Enter") {
-            input.blur();
-            event.preventDefault();
-        }
-    })
 
     //Tar bort kortet när man klickar på krysset
     const delete_card = card.querySelector(".fa-circle-xmark");
     delete_card.addEventListener("click", function () {
         this.parentNode.remove();
+        saveLinks();
     });
 }
 
@@ -337,7 +342,6 @@ async function changeImage() {
 function randomNumber(images, oldIndex) {
     const random = Math.floor(Math.random() * images.length);
     if (random !== oldIndex) {
-        console.log(random);
         return random;
     }
     else {
