@@ -2,7 +2,6 @@
 "use strict";
 import axios from "axios";
 import { saveLinks } from "./storage";
-//import.meta.env.VITE_TEST
 
 const my_api_key = import.meta.env.VITE_WEATHER_TOKEN;
 const unplash_key = import.meta.env.VITE_UNSPLASH_TOKEN;
@@ -87,11 +86,6 @@ function createImage(type = "", url = "") {
     return image;
 }
 
-const button_link = document.querySelector(".dashboard-button-link");
-button_link.addEventListener("click", function () {
-    createCardElement("site")
-});
-
 //Skapar korten inuti dashboarden
 function createCardElement(type = "", url = "", weather = undefined) {
     const card = document.createElement("div");
@@ -152,30 +146,29 @@ input.addEventListener("keypress", (event) => {
         input.blur();
         event.preventDefault();
         saveLinks();
+        input.value = "";
     }
 })
 
 //När man skriver en länk lägger den till ett kort med namn på sidan och favicon
 function addURL(card) {
-    //När inputen går ut ur fokus eller när man trycker enter visas bild och namn på länken
-    input.addEventListener("focusout", () => {
-        const site_link = document.createElement("a");
-        const url = input.value;
-        site_link.textContent = url.split(".")[0].charAt(0).toUpperCase() + url.split(".")[0].slice(1);
-        site_link.href = `https://www.${url}/`;
-        const favicon = createImage("site", url);
-        card.prepend(favicon);
-        card.append(site_link);
-        input.blur();
-    });
-
-    //Tar bort kortet när man klickar på krysset
-    const delete_card = card.querySelector(".fa-circle-xmark");
-    delete_card.addEventListener("click", function () {
-        this.parentNode.remove();
-        saveLinks();
-    });
+    const site_link = document.createElement("a");
+    const url = input.value;
+    site_link.textContent = url.split(".")[0].charAt(0).toUpperCase() + url.split(".")[0].slice(1);
+    site_link.href = `https://www.${url}/`;
+    const favicon = createImage("site", url);
+    card.prepend(favicon);
+    card.append(site_link);
 }
+
+//Tar bort kortet när man klickar på krysset
+const dashboard_links = document.querySelector(".dashboard-site-links");
+dashboard_links.addEventListener("click", function (event) {
+    if (event.target.className.includes("fa-circle-xmark")) {
+        event.target.parentNode.remove();
+        saveLinks();
+    }
+});
 
 const getWeatherApi =
     async (weather_location) => {
@@ -230,13 +223,9 @@ position.addEventListener("click", () => {
     getLocation();
 });
 
-function getInputValue() {
-    const input = document.querySelector(".dashboard-button-weather");
+function getWeatherValue() {
+    const input = document.querySelector(".dashboard-weather-input");
     let location = "";
-
-    input.addEventListener("focusout", () => {
-        location = input.value;
-    });
 
     input.addEventListener("focusout", async () => {
         const weather = await getWeatherApi(location);
@@ -249,8 +238,9 @@ function getInputValue() {
     input.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             location = input.value;
-            input.blur();
             event.preventDefault();
+            input.blur();
+            input.value = "";
         }
     });
 }
@@ -283,16 +273,13 @@ async function nearestTime(weather) {
     return weather_nearest_time;
 }
 
-async function getUnsplash() {
+async function getUnsplash(theme) {
     try {
-        const images = await axios(`https://api.unsplash.com/photos/?client_id=${unplash_key}`);
+        const images = await axios(`https://api.unsplash.com/photos/random?count=10&query=${theme}&client_id=${unplash_key}`);
         return images.data.map(image => {
             return {
                 alt: image.alt_description,
-                description: image.description,
                 src: image.urls.full,
-                height: image.height,
-                width: image.width
             }
         });
     }
@@ -302,30 +289,64 @@ async function getUnsplash() {
     }
 }
 
-let images, imageURL, oldImage, newImage, oldRandom;
-async function renderImages() {
-    const content = document.querySelector(".content");
-    images = await getUnsplash();
+let fetchedImages, renderedImages, oldImage, newImage, oldRandomIndex = 0;
+async function renderImages(theme = "") {
+    const pictures = document.querySelector(".pictures");
 
+    if (pictures.hasChildNodes()) {
+        await replaceImages(pictures, theme);
+        return;
+    }
 
-    imageURL = await Promise.all(images.map(async (image) => {
+    await appendImages(pictures, theme);
+}
+
+async function replaceImages(pictures, theme) {
+    let count = 0;
+    fetchedImages = await getUnsplash(theme);
+
+    renderedImages = await Promise.all(fetchedImages.map(async (image) => {
         const imageContent = await imageOnLoad(image);
         imageContent.classList.add("fade-image");
-        content.append(imageContent);
+        if (count == 0) {
+            oldImage = imageContent;
+        }
+        pictures.childNodes[count].replaceWith(imageContent);
+        count++;
         return imageContent;
     }));
 
-    const random = Math.floor(Math.random() * images.length);
-    imageURL[random].classList.add("fade-in");
-
-    oldImage = imageURL[random];
-    oldRandom = random;
+    oldImage.classList.add("fade-in");
+    count = 0;
 }
 
-async function changeImage() {
-    const random = randomNumber(imageURL, oldRandom);
-    oldRandom = random;
-    newImage = imageURL[random];
+async function appendImages(pictures, theme) {
+    let count = 0;
+    fetchedImages = await getUnsplash(theme);
+
+    renderedImages = await Promise.all(fetchedImages.map(async (image) => {
+        const imageContent = await imageOnLoad(image);
+        imageContent.classList.add("fade-image");
+
+        if (count == 0) {
+            oldImage = imageContent;
+        }
+
+        pictures.append(imageContent)
+        count++;
+        return imageContent;
+    }));
+
+    oldImage.classList.add("fade-in");
+    count = 0;
+}
+
+function changeImage() {
+    if (!renderedImages) return;
+    const randomIndex = randomNumber(renderedImages, oldRandomIndex);
+    oldRandomIndex = randomIndex;
+    newImage = renderedImages[randomIndex];
+
     if (newImage.complete) {
         setTimeout(() => {
             if (oldImage) {
@@ -340,9 +361,9 @@ async function changeImage() {
 }
 
 function randomNumber(images, oldIndex) {
-    const random = Math.floor(Math.random() * images.length);
-    if (random !== oldIndex) {
-        return random;
+    const randomIndex = Math.floor(Math.random() * images.length);
+    if (randomIndex !== oldIndex) {
+        return randomIndex;
     }
     else {
         return randomNumber(images, oldIndex);
@@ -360,9 +381,13 @@ async function imageOnLoad(imgObj) {
 }
 
 const background_button = document.querySelector(".random-background-button");
+const background_input = document.querySelector(".random-background-input");
 background_button.addEventListener("click", changeImage);
-
-window.onload = renderImages();
+background_input.addEventListener("keypress", (event) => {
+    if (event.key == "Enter") {
+        renderImages(background_input.value);
+    }
+})
 
 mapboxgl.accessToken = map_token;
 const map = new mapboxgl.Map({
@@ -383,4 +408,5 @@ map.addControl(
 );
 map.addControl(new mapboxgl.FullscreenControl(), "bottom-left");
 
-getInputValue();
+getWeatherValue();
+renderImages();

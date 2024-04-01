@@ -12,14 +12,13 @@
   box-sizing: border-box;
 }
 
-body {
-  height: 100vh;
-  min-height: fit-content;
+body{
+  background-color: black;
 }
 
 .content {
   display: grid;
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
   isolation: isolate;
   grid-template-areas:
@@ -27,7 +26,6 @@ body {
     "dashboard"
     "random-background";
   color: black;
-  background-color: black;
 }
 
 h1,
@@ -44,7 +42,6 @@ h1,
 
 .dashboard-time {
   grid-area: time;
-  align-items: flex-start;
 }
 
 .time-stats {
@@ -102,7 +99,7 @@ h1,
   background-color: white;
 }
 
-.dashboard-link-title {
+.dashboard-input{
   border: none;
   height: 20px;
   border-radius: 5px;
@@ -110,14 +107,14 @@ h1,
   margin: var(--content-gapS) 0;
 }
 
+.random-background-input{
+  margin:0;
+}
+
 .fa-circle-xmark {
   position: absolute;
   top: 2px;
   right: 2px;
-}
-
-.dashboard-button-link {
-  margin: var(--content-gapS) 0;
 }
 
 .dashboard-weather-links {
@@ -129,7 +126,6 @@ h1,
   width: 100%;
   gap: var(--content-gapXs);
   padding: 0 var(--content-gapS);
-  color: white;
 }
 
 .dashboard-weather {
@@ -137,13 +133,6 @@ h1,
   gap: var(--content-gapXs);
   border-radius: var(--rounded-borderS);
   background-color: white;
-}
-
-.dashboard-button-weather {
-  border: none;
-  height: 20px;
-  border-radius: 5px;
-  text-align: center;
 }
 
 .weather-stats {

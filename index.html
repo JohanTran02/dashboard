@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="index.js" defer></script>
   <script type="module" src="storage.js" defer></script>
+  <script type="module" src="index.js" defer></script>
   <link rel="stylesheet"
     href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.2.0/mapbox-gl-directions.css"
     type="text/css">
@@ -27,19 +27,18 @@
       </div>
     </header>
     <main class="dashboard flex">
-      <h1 contenteditable="true" class="dashboard-title">John Doe Dashboard</h1>
+      <h1 contenteditable="true" class="dashboard-title save">John Doe Dashboard</h1>
       <div class="dashboard-card-container flex">
         <div class="dashboard-card">
           <h1>Snabblänkar</h1>
           <div class="dashboard-site-links flex"></div>
-          <input class="dashboard-link-title" type="text">
-          <!-- <button class="dashboard-button-link">Lägg till länk</button> -->
+          <input class="dashboard-input dashboard-link-title" type="text">
         </div>
         <div class="dashboard-card">
           <h1>Dagens väder</h1>
           <div class="dashboard-weather-links flex"></div>
           <p class="position">Visa min position</p>
-          <input type="text" class="dashboard-button-link dashboard-button-weather" placeholder="Lägg till stad" />
+          <input type="text" class="dashboard-input dashboard-weather-input" placeholder="Lägg till stad" />
         </div>
         <div class="dashboard-card">
           <div id="map"></div>
@@ -47,14 +46,16 @@
         <div class="dashboard-card">
           <h1>Anteckningar</h1>
           <div class="dashboard-note">
-            <div contenteditable="true" class="dashboard-note-area"></div>
+            <div contenteditable="true" class="dashboard-note-area save"></div>
           </div>
         </div>
       </div>
     </main>
     <footer class="random-background flex">
       <button class="random-background-button">Slumpa ny bakgrund</button>
+      <input type="text" class="random-background-input dashboard-input" placeholder="Tema för bakgrund">
     </footer>
+    <div class="pictures"></div>
   </div>
 </body>
 
